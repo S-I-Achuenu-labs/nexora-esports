@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NEXORA Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0b0b0b;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  padding:20px;
+  border-bottom:1px solid #333;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  color:#D4AF37;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.container{
+  padding:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.card{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:15px;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  margin:8px 0;
+  border-radius:7px;
+  border:1px solid #444;
+  background:#0b0b0b;
+  color:white;
+}
+
+button{
+  border:0;
+  padding:11px 15px;
+  border-radius:7px;
+  margin:5px 5px 0 0;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.login{
+  background:#D4AF37;
+  color:#000;
+  width:100%;
+}
+
+.refresh{
+  background:#D4AF37;
+  color:#000;
+}
+
+.logout{
+  background:#333;
+  color:white;
+}
+
+.paid{
+  background:#D4AF37;
+  color:#000;
+}
+
+.approve{
+  background:#198754;
+  color:white;
+}
+
+.reject{
+  background:#dc3545;
+  color:white;
+}
+
+.team{
+  font-size:20px;
+  color:#D4AF37;
+  font-weight:bold;
+}
+
+.info{
+  line-height:1.8;
+  color:#ddd;
+}
+
+.status{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:6px;
+  background:#332b08;
+  color:#D4AF37;
+  margin-top:8px;
+}
+
+#loginPage{
+  max-width:420px;
+  margin:80px auto;
+  padding:20px;
+}
+
+#dashboard{
+  display:none;
+}
+
+#error{
+  color:#ff7777;
+  margin-top:10px;
+}
+
+@media(max-width:600px){
+  .container{
+    padding:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginPage">
+
+  <div class="card">
+
+    <h1 style="color:#D4AF37;">NEXORA ADMIN</h1>
+
+    <p>Admin Login</p>
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Admin email"
+      required
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+      required
+    >
+
+    <button class="login" onclick="login()">
+      LOGIN
+    </button>
+
+    <div id="error"></div>
+
+  </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
+<header>
+
+  <div class="logo">
+    NEXORA ADMIN
+  </div>
+
+  <div>
+
+    <button
+      class="refresh"
+      onclick="loadRegistrations()">
+      REFRESH
+    </button>
+
+    <button
+      class="logout"
+      onclick="logout()">
+      LOGOUT
+    </button>
+
+  </div>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+  <h2 style="color:#D4AF37;">
+    EVENT SETTINGS
+  </h2>
+
+  <label>Event Name</label>
+  <input id="eventName">
+
+  <label>Game</label>
+  <input id="eventGame">
+
+  <label>Entry Fee (NGN)</label>
+  <input
+    id="eventFee"
+    type="number"
+    min="0"
+    placeholder="Not set"
+  >
+
+  <label>Currency</label>
+  <input id="eventCurrency">
+
+  <label>
+    <input
+      id="eventActive"
+      type="checkbox"
+      style="width:auto;"
+    >
+    Event Active
+  </label>
+
+  <br>
+
+  <button
+    class="refresh"
+    onclick="loadEventSettings()">
+    LOAD EVENT
+  </button>
+
+  <button
+    class="paid"
+    onclick="saveEventSettings()">
+    SAVE EVENT SETTINGS
+  </button>
+
+  <div id="eventMessage"></div>
+
+</div>
+<h1 style="color:#D4AF37;">
+Registrations
+</h1>
+
+<div id="message">
+Loading registrations...
+</div>
+
+<div id="registrations"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const db = supabase.createClient(
+
+  "https://ltfztvhxxtyptqyratcb.supabase.co",
+
+  "sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+
+);
+
+
+// LOGIN
+
+async function login(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const errorBox =
+    document.getElementById("error");
+
+  errorBox.innerText = "Logging in...";
+
+  const { error } =
+    await db.auth.signInWithPassword({
+
+      email: email,
+      password: password
+
+    });
+
+  if(error){
+
+    errorBox.innerText =
+      "❌ " + error.message;
+
+    return;
+  }
+
+  errorBox.innerText = "";
+
+  showDashboard();
+
+}
+
+
+// CHECK LOGIN
+
+async function checkUser(){
+
+  const { data } =
+    await db.auth.getSession();
+
+  if(data.session){
+
+    showDashboard();
+
+  }
+
+}
+
+
+// SHOW DASHBOARD
+
+function showDashboard(){
+
+  document.getElementById("loginPage")
+    .style.display = "none";
+
+  document.getElementById("dashboard")
+    .style.display = "block";
+
+  loadRegistrations();
+
+}
+
+
+// LOAD REGISTRATIONS
+
+async function loadRegistrations(){
+
+  const container =
+    document.getElementById("registrations");
+
+  const message =
+    document.getElementById("message");
+
+  message.innerText =
+    "Loading registrations...";
+
+  container.innerHTML = "";
+
+  const { data, error } =
+    await db
+      .from("registrations")
+      .select("*")
+      .order(
+        "created_at",
+        { ascending:false }
+      );
+
+  if(error){
+
+    console.log(error);
+
+    message.innerText =
+      "❌ Could not load registrations: "
+      + error.message;
+
+    return;
+  }
+
+  if(!data || data.length === 0){
+
+    message.innerText =
+      "No registrations yet.";
+
+    return;
+  }
+
+  message.innerText =
+    data.length +
+    " registration(s) found.";
+
+
+  data.forEach(reg => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+
+      <div class="team">
+        ${escapeHTML(reg.team_name)}
+      </div>
+
+      <div class="info">
+
+        <strong>Captain:</strong>
+        ${escapeHTML(reg.captain_name)}
+        <br>
+
+        <strong>Phone:</strong>
+        ${escapeHTML(reg.captain_phone)}
+        <br>
+
+        <strong>Player 1:</strong>
+        ${escapeHTML(reg.player1)}
+        <br>
+
+        <strong>Player 2:</strong>
+        ${escapeHTML(reg.player2)}
+        <br>
+
+        <strong>Player 3:</strong>
+        ${escapeHTML(reg.player3)}
+        <br>
+
+        <strong>Player 4:</strong>
+        ${escapeHTML(reg.player4)}
+        <br>
+
+        <strong>Slot:</strong>
+        ${reg.slot}
+
+        <br>
+
+        <span class="status">
+          Status:
+          ${escapeHTML(
+            reg.status || "pending"
+          )}
+        </span>
+<br>
+
+<strong>Payment:</strong>
+${escapeHTML(
+  reg.payment_status || "unpaid"
+)}
+      </div>
+
+      <div>
+
+        <button
+          class="approve"
+          onclick="updateStatus(
+            ${reg.id},
+            'approved'
+          )">
+          APPROVE
+        </button><button
+  class="paid"
+  onclick="markPaid(${reg.id})">
+  MARK AS PAID
+</button>
+
+        <button
+          class="reject"
+          onclick="updateStatus(
+            ${reg.id},
+            'rejected'
+          )">
+          REJECT
+        </button>
+
+      </div>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+
+// UPDATE STATUS
+
+async function updateStatus(id,status){
+
+  const { error } =
+    await db
+      .from("registrations")
+      .update({
+        status:status
+      })
+      .eq("id",id);
+
+  if(error){
+
+    alert(
+      "❌ Update failed: "
+      + error.message
+    );
+
+    console.log(error);
+
+    return;
+  }
+
+  alert("✅ Registration updated.");
+
+  loadRegistrations();
+
+}
+
+
+async function markPaid(id){
+
+  const { error } = await db
+    .from("registrations")
+    .update({
+      payment_status: "paid"
+    })
+    .eq("id", id);
+
+  if(error){
+
+    alert(
+      "❌ Payment update failed: "
+      + error.message
+    );
+
+    console.log(error);
+
+    return;
+  }
+
+  alert("✅ Payment marked as PAID.");
+
+  loadRegistrations();
+}
+
+
+async function loadEventSettings(){
+
+  const { data, error } = await db
+    .from("event_settings")
+    .select("*")
+    .eq("is_active", true)
+    .limit(1)
+    .single();
+
+  const message =
+    document.getElementById("eventMessage");
+
+  if(error){
+
+    message.innerText =
+      "❌ Could not load event: " +
+      error.message;
+
+    return;
+  }
+
+  document.getElementById("eventName").value =
+    data.event_name || "";
+
+  document.getElementById("eventGame").value =
+    data.game || "";
+
+  document.getElementById("eventFee").value =
+    data.entry_fee ?? "";
+
+  document.getElementById("eventCurrency").value =
+    data.currency || "NGN";
+
+  document.getElementById("eventActive").checked =
+    data.is_active;
+
+  message.innerText =
+    "✅ Event loaded.";
+}
+
+
+async function saveEventSettings(){
+
+  const message =
+    document.getElementById("eventMessage");
+
+  const eventName =
+    document.getElementById("eventName").value.trim();
+
+  const game =
+    document.getElementById("eventGame").value.trim();
+
+  const feeValue =
+    document.getElementById("eventFee").value;
+
+  const currency =
+    document.getElementById("eventCurrency").value.trim();
+
+  const active =
+    document.getElementById("eventActive").checked;
+
+  if(!eventName || !game || !currency){
+
+    message.innerText =
+      "❌ Please fill in the required fields.";
+
+    return;
+  }
+
+  const entryFee =
+    feeValue === ""
+      ? null
+      : Number(feeValue);
+
+  const { data: currentEvent, error: findError } =
+    await db
+      .from("event_settings")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .single();
+
+  if(findError){
+
+    message.innerText =
+      "❌ Could not find event: " +
+      findError.message;
+
+    return;
+  }
+
+  const { error } =
+    await db
+      .from("event_settings")
+      .update({
+        event_name: eventName,
+        game: game,
+        entry_fee: entryFee,
+        currency: currency,
+        is_active: active,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", currentEvent.id);
+
+  if(error){
+
+    message.innerText =
+      "❌ Save failed: " +
+      error.message;
+
+    return;
+  }
+
+  message.innerText =
+    "✅ Event settings saved.";
+}
+
+// LOGOUT
+
+async function logout(){
+
+  await db.auth.signOut();
+
+  location.reload();
+
+}
+
+
+// SAFE TEXT
+
+function escapeHTML(value){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+
+}
+
+
+// START
+
+checkUser();
+
+</script>
+
+</body>
+</html>

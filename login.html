@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NEXORA — Login</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0B0B0B;
+  color:white;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:92%;
+  max-width:430px;
+  padding:30px;
+  background:#111;
+  border:1px solid #D4AF37;
+  border-radius:16px;
+  box-shadow:0 0 25px #000;
+}
+
+h1{
+  text-align:center;
+  color:#D4AF37;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#aaa;
+  margin-bottom:25px;
+}
+
+label{
+  display:block;
+  margin-top:15px;
+  margin-bottom:7px;
+  color:#D4AF37;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#0B0B0B;
+  color:white;
+  outline:none;
+}
+
+input:focus{
+  border-color:#D4AF37;
+}
+
+button{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:0;
+  border-radius:8px;
+  background:#D4AF37;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.msg{
+  text-align:center;
+  margin-top:15px;
+  line-height:1.5;
+}
+
+a{
+  color:#D4AF37;
+  text-decoration:none;
+}
+
+.links{
+  text-align:center;
+  margin-top:20px;
+  color:#aaa;
+}
+
+.links div{
+  margin-top:10px;
+
+}
+
+/* NEXORA LOADING OVERLAY */
+
+#loadingOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0B0B0B;
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+}
+
+.spinner{
+  width:75px;
+  height:75px;
+  border:7px solid #222;
+  border-top:7px solid #D4AF37;
+  border-right:7px solid #D4AF37;
+  border-radius:50%;
+  animation:nexoraSpin 0.7s linear infinite;
+}
+
+.loadingText{
+  display:none;
+}
+
+@keyframes nexoraSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.spinner{
+  width:55px;
+  height:55px;
+  border:5px solid #333;
+  border-top:5px solid #D4AF37;
+  border-radius:50%;
+  animation:nexoraSpin 0.8s linear infinite;
+}
+
+.loadingText{
+  margin-top:15px;
+  color:#D4AF37;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+@keyframes nexoraSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}}
+</style>
+</head>
+
+<body>
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loadingText">NEXORA</div>
+</div>
+
+<div class="box">
+
+<h1>NEXORA</h1>
+
+<div class="subtitle">
+Player Login
+</div>
+
+<form id="loginForm">
+
+<label>Email Address</label>
+<input
+  id="email"
+  type="email"
+  autocomplete="email"
+  required
+>
+
+<label>Password</label>
+<input
+  id="password"
+  type="password"
+  autocomplete="current-password"
+  required
+>
+
+<button type="submit">
+LOGIN
+</button>
+
+</form>
+
+<div class="msg" id="message"></div>
+
+<div class="links">
+
+<div>
+<a href="#" id="forgot">Forgot password?</a>
+</div>
+
+<div>
+Don't have an account?
+<a href="signup.html">Create Account</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const db = supabase.createClient(
+  "https://ltfztvhxxtyptqyratcb.supabase.co",
+  "sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+);
+const loadingOverlay =
+  document.getElementById("loadingOverlay");
+
+function showLoading(text = "PLEASE WAIT"){
+  loadingOverlay.querySelector(".loadingText").textContent = text;
+  loadingOverlay.style.display = "flex";
+}
+
+function hideLoading(){
+  loadingOverlay.style.display = "none";
+}
+
+const form = document.getElementById("loginForm");
+const message = document.getElementById("message");
+
+form.onsubmit = async (e) => {
+
+  e.preventDefault();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  showLoading("LOGGING IN...");
+
+  const { data, error } =
+    await db.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if(error){
+
+  hideLoading();
+  message.textContent = error.message;
+  return;
+
+}
+
+  message.textContent = "Login successful!";
+
+  window.location.href = "player.html";
+
+};
+
+document.getElementById("forgot").onclick = async (e) => {
+
+  e.preventDefault();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  if(!email){
+
+    message.textContent =
+      "Enter your email address first.";
+
+    return;
+
+  }
+
+  message.textContent =
+    "Sending password reset email...";
+
+  const { error } =
+    await db.auth.resetPasswordForEmail(email, {
+      redirectTo:
+        window.location.origin +
+        "/update-password.html"
+    });
+
+  if(error){
+
+    message.textContent = error.message;
+    return;
+
+  }
+
+  message.textContent =
+    "Password reset email sent. Check your inbox.";
+
+};
+
+</script>
+
+</body>
+</html>

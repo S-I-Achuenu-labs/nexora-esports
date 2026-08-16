@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NEXORA Esports | Tournaments</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --black: #0b0b0b;
+    --card: #151515;
+    --gold: #d4af37;
+    --gold-light: #f5d97a;
+    --white: #ffffff;
+    --gray: #a5a5a5;
+    --border: rgba(212,175,55,0.22);
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+header {
+    background: rgba(11,11,11,0.97);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.nav {
+    max-width: 1200px;
+    margin: auto;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.nav a {
+    color: #ddd;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    color: var(--gold);
+}
+
+main {
+    min-height: 80vh;
+    padding: 90px 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.heading small {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+}
+
+.heading h1 {
+    font-size: clamp(35px,7vw,65px);
+    margin: 10px 0;
+}
+
+.heading p {
+    color: var(--gray);
+}
+
+.tournament-card {
+    background: linear-gradient(145deg,#181818,#0f0f0f);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+}
+
+.label {
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.tournament-card h2 {
+    font-size: clamp(30px,6vw,52px);
+    margin: 10px 0;
+}
+
+.description {
+    color: var(--gray);
+    max-width: 700px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.detail {
+    background: #0b0b0b;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.detail span {
+    display: block;
+    color: var(--gray);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.detail strong {
+    color: var(--gold-light);
+    font-size: 20px;
+}
+
+.notice {
+    padding: 18px;
+    margin: 20px 0;
+    border-left: 3px solid var(--gold);
+    background: rgba(212,175,55,0.05);
+    color: var(--gray);
+}
+
+.notice strong {
+    display: block;
+    color: var(--gold-light);
+    margin-bottom: 5px;
+}
+
+.positions {
+    margin: 25px 0;
+}
+
+.positions div {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.positions div:last-child {
+    border-bottom: none;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 13px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 9px;
+    color: var(--gold-light);
+    font-weight: 800;
+}
+
+footer {
+    padding: 45px 20px 25px;
+    background: #070707;
+    text-align: center;
+}
+
+.footer-brand {
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.footer-brand span {
+    color: var(--gold);
+}
+
+.footer-text {
+    color: var(--gray);
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.copyright {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: #666;
+    font-size: 11px;
+}
+
+@media (max-width:600px) {
+
+    .nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav a {
+        margin: 0 7px;
+    }
+
+    main {
+        padding: 60px 15px;
+    }
+
+    .tournament-card {
+        padding: 25px 18px;
+    }
+
+    .details {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<nav class="nav">
+
+<a href="index.html" class="logo">
+NEX<span>ORA</span>
+</a>
+
+<div>
+<a href="index.html">Home</a>
+<a href="tournaments.html">Tournaments</a>
+<a href="index.html#games">Games</a>
+<a href="index.html#leaderboard">Leaderboard</a>
+<a href="index.html#about">About</a>
+</div>
+
+</nav>
+
+</header>
+
+<main>
+
+<div class="container">
+
+<div class="heading">
+
+<small>NEXORA Competition</small>
+
+<h1>TOURNAMENT DETAILS</h1>
+
+<p>
+Everything you need to know about the current NEXORA event.
+</p>
+
+</div>
+
+<div class="tournament-card">
+
+<div class="label">
+🎯 CALL OF DUTY: MOBILE
+</div>
+
+<h2>NEXORA NIGHT WAR</h2>
+
+<p class="description">
+Assemble your squad and prepare for battle.
+NEXORA tournaments are built for competitive players
+ready to prove their skills.
+</p>
+
+<div class="details">
+
+<div class="detail">
+<span>Slots</span>
+<strong>10</strong>
+</div>
+
+<div class="detail">
+<span>Squads Per Slot</span>
+<strong>4</strong>
+</div>
+
+<div class="detail">
+<span>Players Per Squad</span>
+<strong>4</strong>
+</div>
+
+<div class="detail">
+<span>Total Squads</span>
+<strong>40</strong>
+</div>
+
+</div>
+
+<div class="notice">
+
+<strong>💰 ENTRY FEE</strong>
+
+Entry fees are determined separately for each event.
+The amount will be announced when registration opens.
+
+</div>
+
+<div class="notice">
+
+<strong>🏆 PRIZE DISTRIBUTION</strong>
+
+Prize amounts will be announced for each event
+after the community vote.
+
+</div>
+
+<div class="positions">
+
+<div>🥇 <strong>1st Position</strong> — Prize announced for event</div>
+
+<div>🥈 <strong>2nd Position</strong> — Prize announced for event</div>
+
+<div>🥉 <strong>3rd Position</strong> — Prize announced for event</div>
+
+</div>
+
+<div class="notice">
+
+<strong>📢 TOURNAMENT STATUS</strong>
+
+Registration and tournament dates will be announced
+through the official NEXORA community channels.
+
+</div>
+
+<a
+href="https://whatsapp.com/channel/0029VbD3SuhAzNc3ZTnoz03c"
+target="_blank"
+rel="noopener noreferrer"
+class="back">
+FOLLOW NEXORA UPDATES →
+</a>
+
+</div>
+
+</div>
+
+</main>
+
+<footer>
+
+<div class="footer-brand">
+NEX<span>ORA</span> Esports
+</div>
+
+<div class="footer-text">
+Play. Compete. Conquer.
+Nigeria's next esports platform.
+</div>
+
+<div class="copyright">
+
+© 2026 NEXORA Esports. All rights reserved.
+
+<br>
+
+An <strong>Achuenu Labs</strong> project.
+
+</div>
+
+</footer>
+
+</body>
+</html>

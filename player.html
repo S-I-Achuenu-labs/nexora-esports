@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>NEXORA — Player Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0B0B0B;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #333;
+  background:#0B0B0B;
+}
+
+.logo{
+  color:#D4AF37;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.logout{
+  background:transparent;
+  color:#D4AF37;
+  border:1px solid #D4AF37;
+  padding:9px 14px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+.container{
+  width:92%;
+  max-width:900px;
+  margin:30px auto;
+}
+
+.hero{
+  padding:28px;
+  border:1px solid #D4AF37;
+  border-radius:16px;
+  background:#111;
+}
+
+h1{
+  color:#D4AF37;
+  margin-top:0;
+}
+
+.email{
+  color:#aaa;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.card{
+  background:#111;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:22px;
+}
+
+.card h2{
+  color:#D4AF37;
+  font-size:18px;
+}
+
+.card p{
+  color:#aaa;
+  line-height:1.5;
+}
+
+button{
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+NEXORA
+</div>
+
+<button class="logout" id="logout">
+LOGOUT
+</button>
+
+</header>
+
+<div class="container">
+
+<div class="hero">
+
+<h1>Welcome to NEXORA</h1>
+
+<p id="welcome">
+Loading your account...
+</p>
+
+<p class="email" id="email"></p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>🏆 Tournaments</h2>
+
+<p>
+View available NEXORA tournaments
+and register your squad.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>👤 My Account</h2>
+
+<p>
+Your player account is verified and
+protected by Supabase authentication.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>📊 My Activity</h2>
+
+<p>
+Your tournament registrations,
+payments and results will appear here.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>🎮 Games</h2>
+
+<p>
+COD Mobile, Free Fire, PUBG Mobile
+and future NEXORA events.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const db = supabase.createClient(
+  "https://ltfztvhxxtyptqyratcb.supabase.co",
+  "sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+);
+
+async function loadPlayer(){
+
+  const {
+    data: { user },
+    error
+  } = await db.auth.getUser();
+
+  if(error || !user){
+
+    window.location.href = "login.html";
+    return;
+
+  }
+
+  const name =
+    user.user_metadata?.full_name ||
+    "Player";
+
+  document.getElementById("welcome").textContent =
+    "Welcome, " + name + "!";
+
+  document.getElementById("email").textContent =
+    user.email || "";
+
+}
+
+document.getElementById("logout").onclick =
+async () => {
+
+  const { error } =
+    await db.auth.signOut({
+      scope: "local"
+    });
+
+  if(error){
+
+    alert(error.message);
+    return;
+
+  }
+
+  window.location.href = "login.html";
+
+};
+
+loadPlayer();
+
+</script>
+
+</body>
+</html>

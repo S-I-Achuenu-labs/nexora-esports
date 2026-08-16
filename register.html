@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXORA Registration</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{margin:0;background:#0b0b0b;color:#fff;font-family:Arial;padding:20px}
+.box{max-width:600px;margin:30px auto;background:#151515;padding:25px;border-radius:15px;border:1px solid #d4af37}
+h1{text-align:center;color:#d4af37}
+p{color:#aaa}
+input,select,button{width:100%;padding:13px;margin:7px 0 15px;box-sizing:border-box;border-radius:8px}
+input,select{background:#0b0b0b;color:#fff;border:1px solid #444}
+button{background:#d4af37;border:0;font-weight:bold}
+.msg{text-align:center;margin-top:15px}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>NEXORA</h1>
+
+<p>🎯 COD Mobile — NEXORA Night War</p>
+<p>10 slots • 4 squads per slot • 4 players per squad</p>
+
+<form id="form">
+
+<label>Squad / Team Name</label>
+<input id="team" required>
+
+<label>Captain's Name</label>
+<input id="captain" required>
+
+<label>Captain's Phone Number</label>
+<input id="phone" type="tel" placeholder="+234 801 234 5678" required>
+
+<label>Captain's Email Address</label>
+<input
+  id="email"
+  type="email"
+  placeholder="captain@example.com"
+  required
+>
+
+<label>Player 1 — Captain</label>
+<input id="p1" required>
+
+<label>Player 2</label>
+<input id="p2" required>
+
+<label>Player 3</label>
+<input id="p3" required>
+
+<label>Player 4</label>
+<input id="p4" required>
+
+<label>Preferred Slot</label>
+<select id="slot" required>
+<option value="">Select slot</option>
+<option>1</option><option>2</option><option>3</option>
+<option>4</option><option>5</option><option>6</option>
+<option>7</option><option>8</option><option>9</option>
+<option>10</option>
+</select>
+
+<button id="btn">SUBMIT REGISTRATION</button>
+
+</form>
+
+<div class="msg" id="msg"></div>
+
+</div>
+
+<script>
+
+const db=supabase.createClient(
+"https://ltfztvhxxtyptqyratcb.supabase.co",
+"sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+);
+
+form.onsubmit=async e=>{
+
+e.preventDefault();
+
+btn.disabled=true;
+btn.innerText="SUBMITTING...";
+
+const {error}=await db.from("registrations").insert([{
+team_name:team.value,
+captain_name:captain.value,
+captain_phone:phone.value,
+captain_email:email.value,
+player1:p1.value,
+player2:p2.value,
+player3:p3.value,
+player4:p4.value,
+slot:Number(slot.value),
+status:"pending"
+}]);
+
+if(error){
+msg.innerText="❌ Registration failed: "+error.message;
+msg.style.color="#ff7777";
+console.log(error);
+}else{
+msg.innerText="✅ Registration received! Your squad is pending approval.";
+msg.style.color="#8fff9c";
+form.reset();
+}
+
+btn.disabled=false;
+btn.innerText="SUBMIT REGISTRATION";
+
+};
+
+async function loadSlots() {
+  const { data, error } = await db
+    .from("registrations")
+    .select("slot");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const counts = {};
+
+  for (let i = 1; i <= 10; i++) {
+    counts[i] = 0;
+  }
+
+  data.forEach(row => {
+    if (row.slot >= 1 && row.slot <= 10) {
+      counts[row.slot]++;
+    }
+  });
+
+  slot.innerHTML = '<option value="">Select a slot</option>';
+
+  for (let i = 1; i <= 10; i++) {
+    const spaces = 4 - counts[i];
+    const option = document.createElement("option");
+
+    option.value = i;
+
+    if (spaces === 0) {
+      option.textContent = `Slot ${i} — FULL`;
+      option.disabled = true;
+    } else {
+      option.textContent = `Slot ${i} — ${counts[i]}/4 (${spaces} spaces left)`;
+    }
+
+    slot.appendChild(option);
+  }
+}
+
+loadSlots();</script>
+
+</body>
+</html>

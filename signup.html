@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NEXORA — Create Account</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0B0B0B;
+  color:white;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:92%;
+  max-width:430px;
+  padding:30px;
+  background:#111;
+  border:1px solid #D4AF37;
+  border-radius:16px;
+  box-shadow:0 0 25px #000;
+}
+
+h1{
+  text-align:center;
+  color:#D4AF37;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#aaa;
+  margin-bottom:25px;
+}
+
+label{
+  display:block;
+  margin-top:15px;
+  margin-bottom:7px;
+  color:#D4AF37;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#0B0B0B;
+  color:white;
+  outline:none;
+}
+
+input:focus{
+  border-color:#D4AF37;
+}
+
+button{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:0;
+  border-radius:8px;
+  background:#D4AF37;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.msg{
+  text-align:center;
+  margin-top:15px;
+  line-height:1.5;
+}
+
+a{
+  color:#D4AF37;
+  text-decoration:none;
+}
+
+.login{
+  text-align:center;
+  margin-top:20px;
+  color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>NEXORA</h1>
+
+<div class="subtitle">
+Create your player account
+</div>
+
+<form id="signupForm">
+
+<label>Full Name</label>
+<input id="name" type="text" required>
+
+<label>Email Address</label>
+<input id="email" type="email" required>
+
+<label>Password</label>
+<input id="password" type="password" minlength="6" required>
+
+<label>Confirm Password</label>
+<input id="confirmPassword" type="password" minlength="6" required>
+
+<button type="submit">CREATE ACCOUNT</button>
+
+</form>
+
+<div class="msg" id="message"></div>
+
+<div class="login">
+Already have an account?
+<a href="login.html">Login</a>
+</div>
+
+</div>
+
+<script>
+
+const db = supabase.createClient(
+  "https://ltfztvhxxtyptqyratcb.supabase.co",
+  "sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+);
+
+const form = document.getElementById("signupForm");
+const message = document.getElementById("message");
+
+form.onsubmit = async (e) => {
+
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  message.textContent = "";
+
+  if(password !== confirmPassword){
+    message.textContent = "Passwords do not match.";
+    return;
+  }
+
+  message.textContent = "Creating your account...";
+
+  const { data, error } = await db.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        full_name: name
+      }
+    }
+  });
+
+  if(error){
+    message.textContent = error.message;
+    return;
+  }
+
+  localStorage.setItem("nexora_verify_email", email);
+
+  message.innerHTML =
+    "Account created! Check your email for your verification code.<br><br>" +
+    '<a href="verify.html">ENTER VERIFICATION CODE</a>';
+};
+
+</script>
+
+</body>
+</html>
+	
+

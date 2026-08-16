@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NEXORA Esports | Play. Compete. Conquer.</title>
+
+<meta name="description" content="NEXORA Esports — compete, connect and become a champion.">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --black: #0b0b0b;
+    --dark: #111111;
+    --card: #151515;
+    --gold: #d4af37;
+    --gold-light: #f5d97a;
+    --white: #ffffff;
+    --gray: #a5a5a5;
+    --border: rgba(212,175,55,0.22);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+}
+
+/* NAVIGATION */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(11,11,11,0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.nav {
+    max-width: 1200px;
+    margin: auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #d6d6d6;
+    font-size: 14px;
+}
+
+.nav-links a:hover {
+    color: var(--gold);
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 9px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--gold-light);
+    font-size: 13px;
+}
+
+.btn-small.gold {
+    background: var(--gold);
+    color: #080808;
+    font-weight: 800;
+}
+
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+/* HERO */
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 20px 70px;
+    background:
+        radial-gradient(circle at center, rgba(212,175,55,0.12), transparent 35%),
+        #090909;
+}
+
+.hero-content {
+    max-width: 850px;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: var(--gold-light);
+    border: 1px solid var(--border);
+    background: rgba(212,175,55,0.05);
+    padding: 7px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(48px,10vw,100px);
+    line-height: 0.95;
+    letter-spacing: -4px;
+    font-weight: 950;
+}
+
+.hero h1 span {
+    color: var(--gold);
+}
+
+.hero h2 {
+    margin-top: 22px;
+    font-size: clamp(20px,4vw,36px);
+}
+
+.hero p {
+    max-width: 600px;
+    margin: 20px auto 30px;
+    color: var(--gray);
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 22px;
+    border-radius: 9px;
+    border: 1px solid var(--gold);
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: #090909;
+}
+
+.btn-outline {
+    color: var(--gold-light);
+}
+
+.stats {
+    max-width: 800px;
+    margin: 55px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.stat {
+    padding: 18px 10px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+.stat strong {
+    display: block;
+    color: var(--gold-light);
+    font-size: 22px;
+}
+
+.stat span {
+    color: var(--gray);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+/* GENERAL */
+
+section {
+    padding: 90px 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.section-heading {
+    margin-bottom: 35px;
+}
+
+.section-heading small {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.section-heading h2 {
+    font-size: clamp(28px,5vw,44px);
+    margin-top: 7px;
+}
+
+.section-heading p {
+    color: var(--gray);
+    max-width: 600px;
+    margin-top: 8px;
+}
+
+/* FEATURED TOURNAMENT */
+
+.featured {
+    background: linear-gradient(135deg,#171717,#0f0f0f);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+}
+
+.featured-label {
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.featured h3 {
+    font-size: clamp(28px,5vw,50px);
+    margin: 12px 0;
+}
+
+.featured p {
+    color: var(--gray);
+    max-width: 650px;
+}
+
+.tournament-info {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    margin: 28px 0;
+}
+
+.info-box {
+    background: #0b0b0b;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 14px;
+    border-radius: 10px;
+}
+
+.info-box span {
+    display: block;
+    color: var(--gray);
+    font-size: 11px;
+}
+
+.info-box strong {
+    color: var(--gold-light);
+}
+
+.announcement {
+    margin: 20px 0;
+    padding: 16px;
+    border-left: 3px solid var(--gold);
+    background: rgba(212,175,55,0.05);
+    color: var(--gray);
+}
+
+.announcement strong {
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* COMMUNITY */
+
+.community {
+    background: #101010;
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+}
+
+.community-card {
+    display: block;
+    padding: 28px;
+    background: linear-gradient(145deg,#181818,#0d0d0d);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    transition: 0.2s ease;
+}
+
+.community-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+}
+
+.community-icon {
+    font-size: 38px;
+    margin-bottom: 14px;
+}
+
+.community-card h3 {
+    margin-bottom: 6px;
+}
+
+.community-card p {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.community-card .join {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* GAMES */
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+}
+
+.game-card {
+    min-height: 220px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 25px;
+    background: linear-gradient(145deg,#171717,#0e0e0e);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.game-icon {
+    font-size: 50px;
+    margin-bottom: auto;
+}
+
+.game-card h3 {
+    font-size: 22px;
+}
+
+.game-card p {
+    color: var(--gray);
+    font-size: 13px;
+    margin: 5px 0 14px;
+}
+
+.status {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.status.available {
+    color: #0b0b0b;
+    background: var(--gold);
+}
+
+.status.soon {
+    color: var(--gold-light);
+    border: 1px solid var(--border);
+}
+
+/* LEADERBOARD */
+
+.leaderboard {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.player {
+    display: grid;
+    grid-template-columns: 60px 1fr 120px;
+    align-items: center;
+    padding: 18px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.player:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    color: var(--gold);
+    font-weight: 900;
+}
+
+.player-name {
+    font-weight: 700;
+}
+
+.player-name span {
+    display: block;
+    color: var(--gray);
+    font-size: 11px;
+}
+
+.points {
+    color: var(--gold-light);
+    font-weight: 800;
+}
+
+/* ABOUT */
+
+.about {
+    background: #111;
+}
+
+.about-box {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+.about-box p {
+    color: var(--gray);
+    margin-top: 15px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 55px 20px 25px;
+    background: #070707;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-brand {
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.footer-brand span {
+    color: var(--gold);
+}
+
+.footer-text {
+    color: var(--gray);
+    max-width: 350px;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.copyright {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: #666;
+    font-size: 11px;
+}
+
+/* MOBILE */
+
+@media (max-width:800px) {
+
+    .nav-links,
+    .nav-buttons {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .stat:nth-child(2) {
+        border-right: none;
+    }
+
+    .stat:nth-child(-n+2) {
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .tournament-info {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .games-grid,
+    .community-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .player {
+        grid-template-columns: 45px 1fr 80px;
+    }
+}
+
+@media (max-width:480px) {
+
+    section {
+        padding: 65px 15px;
+    }
+
+    .hero {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+
+    .stats {
+        margin-top: 35px;
+    }
+
+    .tournament-info {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<nav class="nav">
+
+<a href="index.html" class="logo">
+NEX<span>ORA</span>
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="tournaments.html">Tournaments</a>
+<a href="#games">Games</a>
+<a href="#leaderboard">Leaderboard</a>
+<a href="#about">About</a>
+</div>
+
+<div class="nav-buttons">
+<a href="#" class="btn-small">Login</a>
+<a href="#" class="btn-small gold">Sign Up</a>
+</div>
+
+<button class="menu-btn">☰</button>
+
+</nav>
+</header>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+<div class="eyebrow">
+NIGERIA'S NEXT ESPORTS PLATFORM
+</div>
+
+<h1>
+NEX<span>ORA</span>
+</h1>
+
+<h2>
+WHERE GAMERS BECOME CHAMPIONS.
+</h2>
+
+<p>
+Compete in tournaments, prove your skill,
+climb the rankings and build your legacy.
+</p>
+
+<div class="hero-actions">
+
+<a href="tournaments.html" class="btn btn-primary">
+🏆 EXPLORE TOURNAMENTS
+</a>
+
+<a href="tournaments.html" class="btn btn-outline">
+🎮 JOIN NEXORA
+</a>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<strong>3</strong>
+<span>Games</span>
+</div>
+
+<div class="stat">
+<strong>0+</strong>
+<span>Tournaments</span>
+</div>
+
+<div class="stat">
+<strong>0+</strong>
+<span>Players</span>
+</div>
+
+<div class="stat">
+<strong>₦0</strong>
+<span>Prize Money</span>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FEATURED TOURNAMENT -->
+
+<section>
+
+<div class="container">
+
+<div class="section-heading">
+
+<small>Featured Tournament</small>
+
+<h2>THIS WEEK'S BATTLE</h2>
+
+<p>
+Tournament information and prize details will be updated for each event.
+</p>
+
+</div>
+
+<div class="featured">
+
+<div class="featured-label">
+🎯 CALL OF DUTY: MOBILE
+</div>
+
+<h3>NEXORA NIGHT WAR</h3>
+
+<p>
+The battlefield is waiting. Assemble your squad,
+choose your slot and compete for the championship.
+</p>
+
+<div class="tournament-info">
+
+<div class="info-box">
+<span>SLOTS</span>
+<strong>10</strong>
+</div>
+
+<div class="info-box">
+<span>SQUADS / SLOT</span>
+<strong>4</strong>
+</div>
+
+<div class="info-box">
+<span>PLAYERS / SQUAD</span>
+<strong>4</strong>
+</div>
+
+<div class="info-box">
+<span>TOTAL SQUADS</span>
+<strong>40</strong>
+</div>
+
+</div>
+
+<div class="announcement">
+
+<strong>🏆 WEEKLY PRIZE</strong>
+
+Prize distribution will be announced for each event
+after the community vote.
+
+<br><br>
+
+🥇 1st Position &nbsp; • &nbsp;
+🥈 2nd Position &nbsp; • &nbsp;
+🥉 3rd Position
+
+</div>
+
+<a href="tournament-status.html" class="btn btn-primary">
+VIEW TOURNAMENT DETAILS →
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- COMMUNITY -->
+
+<section id="community" class="community">
+
+<div class="container">
+
+<div class="section-heading">
+
+<small>Stay Connected</small>
+
+<h2>JOIN THE NEXORA COMMUNITY</h2>
+
+<p>
+Get tournament announcements, updates, results and community news.
+</p>
+
+</div>
+
+<div class="community-grid">
+
+<a
+href="https://whatsapp.com/channel/0029VbD3SuhAzNc3ZTnoz03c"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-icon">💬</div>
+
+<h3>WhatsApp Channel</h3>
+
+<p>
+Follow the official NEXORA WhatsApp Channel
+for tournament updates and announcements.
+</p>
+
+<span class="join">FOLLOW CHANNEL →</span>
+
+</a>
+
+<a
+href="https://t.me/NEXORAEsportsOfficial"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-icon">✈️</div>
+
+<h3>Telegram Channel</h3>
+
+<p>
+Join the official NEXORA Telegram community
+for announcements, results and events.
+</p>
+
+<span class="join">JOIN TELEGRAM →</span>
+
+</a>
+
+<a
+href="https://www.tiktok.com/@iamryven"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-icon">🎵</div>
+
+<h3>Follow on TikTok</h3>
+
+<p>
+Follow our TikTok account for gaming content,
+clips, announcements and NEXORA updates.
+</p>
+
+<span class="join">FOLLOW TIKTOK →</span>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- GAMES -->
+
+<section id="games">
+
+<div class="container">
+
+<div class="section-heading">
+
+<small>Games</small>
+
+<h2>CHOOSE YOUR BATTLE</h2>
+
+<p>
+Pick your game and find your next competition.
+</p>
+
+</div>
+
+<div class="games-grid">
+
+<div class="game-card">
+
+<div class="game-icon">🎯</div>
+
+<h3>Call of Duty: Mobile</h3>
+
+<p>
+Competitive mobile FPS.
+</p>
+
+<span class="status available">AVAILABLE</span>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🔥</div>
+
+<h3>Free Fire</h3>
+
+<p>
+Fast-paced battle royale.
+</p>
+
+<span class="status soon">COMING SOON</span>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">⚡</div>
+
+<h3>Blood Strike</h3>
+
+<p>
+Fast action and intense combat.
+</p>
+
+<span class="status soon">COMING SOON</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- LEADERBOARD -->
+
+<section id="leaderboard">
+
+<div class="container">
+
+<div class="section-heading">
+
+<small>Rankings</small>
+
+<h2>LEADERBOARD</h2>
+
+<p>
+Top players and squads will appear here as NEXORA competitions begin.
+</p>
+
+</div>
+
+<div class="leaderboard">
+
+<div class="player">
+
+<div class="rank">#1</div>
+
+<div class="player-name">
+Coming Soon
+<span>NEXORA Player</span>
+</div>
+
+<div class="points">
+0 PTS
+</div>
+
+</div>
+
+<div class="player">
+
+<div class="rank">#2</div>
+
+<div class="player-name">
+Coming Soon
+<span>NEXORA Player</span>
+</div>
+
+<div class="points">
+0 PTS
+</div>
+
+</div>
+
+<div class="player">
+
+<div class="rank">#3</div>
+
+<div class="player-name">
+Coming Soon
+<span>NEXORA Player</span>
+</div>
+
+<div class="points">
+0 PTS
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ABOUT -->
+
+<section id="about" class="about">
+
+<div class="container">
+
+<div class="about-box">
+
+<div class="section-heading">
+
+<small>About NEXORA</small>
+
+<h2>BUILT FOR COMPETITORS.</h2>
+
+</div>
+
+<p>
+NEXORA Esports is a competitive gaming platform
+built to connect players, squads and tournaments
+in one professional esports community.
+</p>
+
+<p>
+Compete. Connect. Improve. Become a champion.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+
+<div class="footer-content">
+
+<div class="footer-brand">
+NEX<span>ORA</span> Esports
+</div>
+
+<div class="footer-text">
+Play. Compete. Conquer.
+Nigeria's next esports platform.
+</div>
+
+<div class="copyright">
+
+© 2026 NEXORA Esports. All rights reserved.
+
+<br>
+
+An <strong>Achuenu Labs</strong> project.
+
+</div>
+
+</div>
+
+</footer>
+
+<script>
+
+const menuBtn = document.querySelector(".menu-btn");
+const navLinks = document.querySelector(".nav-links");
+
+menuBtn.addEventListener("click", function () {
+
+if (navLinks.style.display === "flex") {
+
+navLinks.style.display = "none";
+
+} else {
+
+navLinks.style.display = "flex";
+navLinks.style.flexDirection = "column";
+navLinks.style.position = "absolute";
+navLinks.style.top = "65px";
+navLinks.style.left = "0";
+navLinks.style.width = "100%";
+navLinks.style.padding = "20px";
+navLinks.style.background = "#0b0b0b";
+navLinks.style.gap = "20px";
+navLinks.style.borderBottom = "1px solid #d4af37";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
