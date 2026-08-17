@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>NEXORA — Account Created</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0B0B0B;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:92%;
+  max-width:430px;
+  padding:35px 28px;
+  background:#111;
+  border:1px solid #D4AF37;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 0 30px #000;
+}
+
+.icon{
+  width:80px;
+  height:80px;
+  margin:0 auto 20px;
+  border:2px solid #D4AF37;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+}
+
+h1{
+  color:#D4AF37;
+  margin:0 0 12px;
+}
+
+p{
+  color:#aaa;
+  line-height:1.6;
+}
+
+.email{
+  color:#fff;
+  font-weight:bold;
+  word-break:break-word;
+  margin:18px 0;
+}
+
+.note{
+  color:#777;
+  font-size:13px;
+}
+
+button{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  border:0;
+  border-radius:8px;
+  background:#D4AF37;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<div class="icon">✓</div>
+
+<h1>ACCOUNT CREATED</h1>
+
+<p>
+Your NEXORA player account has been created successfully.
+</p>
+
+<p>
+We've sent a verification email to:
+</p>
+
+<div class="email" id="email">
+your email
+</div>
+
+<p class="note">
+Open your email and tap the verification link to activate your account.
+</p>
+
+<button onclick="location.href='login.html'">
+GO TO LOGIN
+</button>
+
+</div>
+
+<script>
+
+const email =
+localStorage.getItem("nexora_verify_email");
+
+if(email){
+  document.getElementById("email").textContent = email;
+}
+
+</script>
+
+</body>
+</html>

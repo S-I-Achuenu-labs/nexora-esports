@@ -77,10 +77,32 @@ button{
   cursor:pointer;
 }
 
+button:disabled{
+  opacity:.8;
+  cursor:not-allowed;
+}
+
+.spinner{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  border:2px solid #000;
+  border-top-color:transparent;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  vertical-align:middle;
+  margin-right:8px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
 .msg{
   text-align:center;
   margin-top:15px;
   line-height:1.5;
+  color:#ff7777;
 }
 
 a{
@@ -120,7 +142,9 @@ Create your player account
 <label>Confirm Password</label>
 <input id="confirmPassword" type="password" minlength="6" required>
 
-<button type="submit">CREATE ACCOUNT</button>
+<button id="createBtn" type="submit">
+CREATE ACCOUNT
+</button>
 
 </form>
 
@@ -142,50 +166,82 @@ const db = supabase.createClient(
 
 const form = document.getElementById("signupForm");
 const message = document.getElementById("message");
+const createBtn = document.getElementById("createBtn");
 
 form.onsubmit = async (e) => {
 
   e.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+  const name =
+    document.getElementById("name").value.trim();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const confirmPassword =
+    document.getElementById("confirmPassword").value;
 
   message.textContent = "";
 
   if(password !== confirmPassword){
-    message.textContent = "Passwords do not match.";
+
+    message.textContent =
+      "Passwords do not match.";
+
     return;
   }
 
-  message.textContent = "Creating your account...";
+  createBtn.disabled = true;
 
-  const { data, error } = await db.auth.signUp({
+  createBtn.innerHTML =
+    '<span class="spinner"></span>CREATING ACCOUNT...';
+
+  const { error } = await db.auth.signUp({
+
     email: email,
+
     password: password,
+
     options: {
+
       data: {
         full_name: name
-      }
+      },
+
+      emailRedirectTo:
+        "https://s-i-achuenu-labs.github.io/nexora-esports/verification.html"
+
     }
+
   });
 
   if(error){
-    message.textContent = error.message;
+
+    createBtn.disabled = false;
+
+    createBtn.innerText =
+      "CREATE ACCOUNT";
+
+    message.textContent =
+      error.message;
+
     return;
   }
 
-  localStorage.setItem("nexora_verify_email", email);
+  localStorage.setItem(
+    "nexora_verify_email",
+    email
+  );
 
-  message.innerHTML =
-    "Account created! Check your email for your verification code.<br><br>" +
-    '<a href="verify.html">ENTER VERIFICATION CODE</a>';
+  window.location.href =
+    "verification.html";
+
 };
 
 </script>
 
 </body>
 </html>
-	
-
