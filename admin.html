@@ -267,6 +267,12 @@ Loading registrations...
 
 <div id="registrations"></div>
 
+<div class="card" style="margin-top:25px;">
+<h1 style="color:#D4AF37;">🛟 Support Tickets</h1>
+<div id="supportSummary" class="info">Loading support tickets...</div>
+<div id="supportTickets"></div>
+</div>
+
 </div>
 
 </div>
@@ -348,6 +354,7 @@ function showDashboard(){
     .style.display = "block";
 
   loadRegistrations();
+  loadSupportTickets();
 
 }
 
@@ -550,6 +557,108 @@ async function markPaid(id){
   loadRegistrations();
 }
 
+
+
+async function loadSupportTickets(){
+
+  const container = document.getElementById("supportTickets");
+  const summary = document.getElementById("supportSummary");
+
+  summary.innerText = "Loading support tickets...";
+  container.innerHTML = "";
+
+  const { data, error } = await db
+    .from("support_tickets")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+    summary.innerText = "❌ Could not load support tickets: " + error.message;
+    return;
+  }
+
+  if(!data || data.length === 0){
+    summary.innerText = "No support tickets yet.";
+    return;
+  }
+
+  const open = data.filter(t => (t.status || "open") === "open").length;
+  const progress = data.filter(t => t.status === "in_progress").length;
+  const resolved = data.filter(t => t.status === "resolved").length;
+
+  summary.innerText =
+    data.length + " ticket(s) • " +
+    open + " open • " +
+    progress + " in progress • " +
+    resolved + " resolved";
+
+  data.forEach(ticket => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const status = ticket.status || "open";
+
+    card.innerHTML = `
+      <div class="team">
+        ${escapeHTML(ticket.subject)}
+      </div>
+
+      <div class="info">
+        <strong>User ID:</strong>
+        ${escapeHTML(ticket.user_id)}
+        <br>
+
+        <strong>Message:</strong><br>
+        ${escapeHTML(ticket.message)}
+        <br><br>
+
+        <strong>Submitted:</strong>
+        ${escapeHTML(new Date(ticket.created_at).toLocaleString())}
+        <br>
+
+        <span class="status">
+          Status: ${escapeHTML(status)}
+        </span>
+      </div>
+
+      <div>
+        <button
+          class="refresh"
+          onclick="updateTicketStatus(${ticket.id}, 'in_progress')">
+          IN PROGRESS
+        </button>
+
+        <button
+          class="approve"
+          onclick="updateTicketStatus(${ticket.id}, 'resolved')">
+          RESOLVE
+        </button>
+      </div>
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+async function updateTicketStatus(id, status){
+
+  const { error } = await db
+    .from("support_tickets")
+    .update({ status: status })
+    .eq("id", id);
+
+  if(error){
+    alert("❌ Ticket update failed: " + error.message);
+    console.log(error);
+    return;
+  }
+
+  loadSupportTickets();
+
+}
 
 async function loadEventSettings(){
 
