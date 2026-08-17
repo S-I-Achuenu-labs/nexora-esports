@@ -82,13 +82,22 @@ const db=supabase.createClient(
 );
 
 form.onsubmit=async e=>{
-
 e.preventDefault();
+
+const { data: { user }, error: userError } = await db.auth.getUser();
+
+if(userError || !user){
+  msg.innerText="🔒 Please log in before registering for a tournament.";
+  msg.style.color="#ff7777";
+  return;
+}
+
 
 btn.disabled=true;
 btn.innerText="SUBMITTING...";
 
 const {error}=await db.from("registrations").insert([{
+user_id:user.id,
 team_name:team.value,
 captain_name:captain.value,
 captain_phone:phone.value,
