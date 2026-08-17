@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>NEXORA — Support</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0B0B0B;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #333;
+  background:#0B0B0B;
+}
+
+.logo{
+  color:#D4AF37;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.back{
+  color:#D4AF37;
+  text-decoration:none;
+  border:1px solid #D4AF37;
+  padding:8px 13px;
+  border-radius:7px;
+  font-size:13px;
+}
+
+.container{
+  width:92%;
+  max-width:850px;
+  margin:30px auto;
+}
+
+.hero{
+  padding:28px;
+  border:1px solid #D4AF37;
+  border-radius:16px;
+  background:#111;
+  margin-bottom:20px;
+}
+
+h1{
+  color:#D4AF37;
+  margin-top:0;
+}
+
+.subtitle{
+  color:#aaa;
+}
+
+.card{
+  background:#111;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+.card h2{
+  color:#D4AF37;
+  font-size:18px;
+}
+
+label{
+  display:block;
+  color:#ccc;
+  margin:15px 0 7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#0B0B0B;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  margin-top:18px;
+  padding:13px;
+  border:0;
+  border-radius:8px;
+  background:#D4AF37;
+  color:#080808;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.message{
+  text-align:center;
+  margin-top:15px;
+}
+
+.ticket{
+  background:#0B0B0B;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:16px;
+  margin-top:12px;
+}
+
+.ticket h3{
+  margin:0 0 8px;
+  color:#fff;
+}
+
+.ticket p{
+  color:#aaa;
+  line-height:1.5;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:20px;
+  border:1px solid #D4AF37;
+  color:#F5D97A;
+  font-size:11px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+
+.date{
+  color:#666;
+  font-size:11px;
+  margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+NEXORA SUPPORT
+</div>
+
+<a href="player.html" class="back">
+← DASHBOARD
+</a>
+
+</header>
+
+<div class="container">
+
+<div class="hero">
+
+<h1>🛟 NEXORA Support</h1>
+
+<p class="subtitle">
+Need help? Send us a support request and our team will review it.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Submit a Support Request</h2>
+
+<form id="supportForm">
+
+<label for="subject">
+Subject
+</label>
+
+<input
+  id="subject"
+  type="text"
+  placeholder="What do you need help with?"
+  required
+>
+
+<label for="message">
+Message
+</label>
+
+<textarea
+  id="message"
+  placeholder="Describe your problem..."
+  required
+></textarea>
+
+<button id="submitBtn" type="submit">
+SUBMIT TICKET
+</button>
+
+</form>
+
+<div class="message" id="msg"></div>
+
+</div>
+
+<div class="card">
+
+<h2>My Support Requests</h2>
+
+<div id="tickets">
+Loading your tickets...
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const db = supabase.createClient(
+  "https://ltfztvhxxtyptqyratcb.supabase.co",
+  "sb_publishable_XmtZcHggM7mA4jW-GNA6_w_cF6hQ5GD"
+);
+
+const form = document.getElementById("supportForm");
+const subject = document.getElementById("subject");
+const message = document.getElementById("message");
+const submitBtn = document.getElementById("submitBtn");
+const msg = document.getElementById("msg");
+const tickets = document.getElementById("tickets");
+
+let currentUser = null;
+
+async function loadSupport(){
+
+  const {
+    data: { user },
+    error
+  } = await db.auth.getUser();
+
+  if(error || !user){
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+
+  await loadTickets();
+}
+
+async function loadTickets(){
+
+  const { data, error } = await db
+    .from("support_tickets")
+    .select("id,subject,message,status,created_at")
+    .order("created_at", { ascending:false });
+
+  if(error){
+
+    tickets.innerHTML =
+      '<p style="color:#ff7777;">Unable to load support requests.</p>';
+
+    console.log(error);
+    return;
+  }
+
+  if(!data || data.length === 0){
+
+    tickets.innerHTML =
+      '<p style="color:#aaa;">You have no support requests yet.</p>';
+
+    return;
+  }
+
+  tickets.innerHTML = "";
+
+  data.forEach(ticket => {
+
+    const item = document.createElement("div");
+
+    item.className = "ticket";
+
+    const date = new Date(ticket.created_at)
+      .toLocaleString();
+
+    item.innerHTML = `
+      <h3>#${ticket.id} — ${escapeHtml(ticket.subject)}</h3>
+      <span class="status">${escapeHtml(ticket.status)}</span>
+      <p>${escapeHtml(ticket.message)}</p>
+      <div class="date">${date}</div>
+    `;
+
+    tickets.appendChild(item);
+
+  });
+
+}
+
+function escapeHtml(text){
+
+  const div = document.createElement("div");
+  div.textContent = text || "";
+  return div.innerHTML;
+
+}
+
+form.onsubmit = async e => {
+
+  e.preventDefault();
+
+  if(!currentUser){
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = "SUBMITTING...";
+
+  msg.innerText = "";
+
+  const { error } = await db
+    .from("support_tickets")
+    .insert({
+      user_id: currentUser.id,
+      subject: subject.value.trim(),
+      message: message.value.trim()
+    });
+
+  if(error){
+
+    msg.innerText =
+      "❌ Failed to submit request: " + error.message;
+
+    msg.style.color = "#ff7777";
+
+    console.log(error);
+
+  }else{
+
+    msg.innerText =
+      "✅ Support request submitted. Your ticket is OPEN.";
+
+    msg.style.color = "#8fff9c";
+
+    form.reset();
+
+    await loadTickets();
+
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerText = "SUBMIT TICKET";
+
+};
+
+loadSupport();
+
+</script>
+
+</body>
+</html>
