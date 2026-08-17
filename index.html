@@ -616,7 +616,7 @@ NEX<span>ORA</span>
 <a href="signup.html" class="btn-small gold">Sign Up</a>
 </div>
 
-<button class="menu-btn">☰</button>
+<button type="button" class="menu-btn">☰</button>
 
 </nav>
 </header>
@@ -1053,27 +1053,39 @@ An <strong>Achuenu Labs</strong> project.
 
 const menuBtn = document.querySelector(".menu-btn");
 const navLinks = document.querySelector(".nav-links");
+const navButtons = document.querySelector(".nav-buttons");
 
 menuBtn.addEventListener("click", function () {
 
-if (navLinks.style.display === "flex") {
+    const open = navLinks.style.display === "flex";
 
-navLinks.style.display = "none";
+    if (open) {
+        navLinks.style.display = "none";
+        navButtons.style.display = "none";
+        menuBtn.textContent = "☰";
+    } else {
+        navLinks.style.display = "flex";
+        navLinks.style.flexDirection = "column";
+        navLinks.style.position = "absolute";
+        navLinks.style.top = "65px";
+        navLinks.style.left = "0";
+        navLinks.style.width = "100%";
+        navLinks.style.padding = "20px";
+        navLinks.style.background = "#0b0b0b";
+        navLinks.style.gap = "20px";
+        navLinks.style.borderBottom = "1px solid #d4af37";
 
-} else {
+        navButtons.style.display = "flex";
+        navButtons.style.position = "absolute";
+        navButtons.style.top = "320px";
+        navButtons.style.left = "0";
+        navButtons.style.width = "100%";
+        navButtons.style.padding = "0 20px 20px";
+        navButtons.style.background = "#0b0b0b";
+        navButtons.style.gap = "12px";
 
-navLinks.style.display = "flex";
-navLinks.style.flexDirection = "column";
-navLinks.style.position = "absolute";
-navLinks.style.top = "65px";
-navLinks.style.left = "0";
-navLinks.style.width = "100%";
-navLinks.style.padding = "20px";
-navLinks.style.background = "#0b0b0b";
-navLinks.style.gap = "20px";
-navLinks.style.borderBottom = "1px solid #d4af37";
-
-}
+        menuBtn.textContent = "✕";
+    }
 
 });
 
